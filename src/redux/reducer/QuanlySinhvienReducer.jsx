@@ -8,18 +8,6 @@ const initialState = {
       sdt: "0797751163",
       email: "nguyenvana@gmail.com",
     },
-    {
-      id: 2,
-      name: "Nguyễn Văn B",
-      sdt: "0797751163",
-      email: "nguyenvanb@gmail.com",
-    },
-    {
-      id: 3,
-      name: "Nguyễn Văn C",
-      sdt: "0797751163",
-      email: "nguyenvanC@gmail.com",
-    },
   ],
 };
 
@@ -30,11 +18,10 @@ const QuanlySinhvienReducer = createSlice({
     pushNewSV(state, action) {
       switch (action.type) {
         case "ADD-SINH-VIEN": {
-          console.log("Rendering List");
-
-          const arrSvUpdate = [...state.arrSV, action.sinhvien];
-          state.arrSV = arrSvUpdate;
-          return { ...state };
+          console.log(action); ///ko log ra đc action ?
+          // const arrSvUpdate = [...state.arrSV, action.sinhvien];
+          // state.arrSV = arrSvUpdate;
+          // return { ...state };
         }
         default: {
           return { ...state };
@@ -45,6 +32,6 @@ const QuanlySinhvienReducer = createSlice({
 });
 
 export const { pushNewSV } = QuanlySinhvienReducer.actions;
-console.log(QuanlySinhvienReducer.actions.pushNewSV);
+//console.log(QuanlySinhvienReducer.actions.pushNewSV);
 
 export default QuanlySinhvienReducer.reducer;

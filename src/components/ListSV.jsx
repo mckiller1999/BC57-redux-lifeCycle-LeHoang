@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 class ListSV extends Component {
   renderList = () => {
     const { arrSV } = this.props;
+    //console.log(arrSV);
+
     return arrSV.map((sinhVien, index) => {
       return (
         <tr key={index}>

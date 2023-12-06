@@ -9,29 +9,50 @@ const initialState = {
       email: "nguyenvana@gmail.com",
     },
   ],
+  sinhVien: {
+    values: {
+      id: "",
+      name: "",
+      sdt: "",
+      email: "",
+    },
+
+    errors: {
+      id: "",
+      name: "",
+      sdt: "",
+      email: "",
+    },
+  },
 };
 
 const QuanlySinhvienReducer = createSlice({
   name: "QuanlySinhvienReducer",
   initialState,
   reducers: {
-    pushNewSV(state, action) {
+    pushNewSV: (state, action) => {
+      //console.log(action.type);
       switch (action.type) {
         case "ADD-SINH-VIEN": {
-          console.log(action); ///ko log ra đc action ?
-          // const arrSvUpdate = [...state.arrSV, action.sinhvien];
-          // state.arrSV = arrSvUpdate;
-          // return { ...state };
+          console.log(action);
+          const arrSvUpdate = [...state.arrSV, action.sinhvien];
+          state.arrSV = arrSvUpdate;
+          return { ...state };
         }
         default: {
           return { ...state };
         }
       }
     },
+    updateSinhVienValues: (state, action) => {
+      state.sinhVien.values = action.payload;
+    },
   },
 });
 
-export const { pushNewSV } = QuanlySinhvienReducer.actions;
-//console.log(QuanlySinhvienReducer.actions.pushNewSV);
+export const { pushNewSV, updateSinhVienValues } =
+  QuanlySinhvienReducer.actions;
+
+console.log(QuanlySinhvienReducer.actions);
 
 export default QuanlySinhvienReducer.reducer;

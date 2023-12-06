@@ -1,32 +1,45 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import {
+  updateSinhVienValues,
+  pushNewSV,
+} from "../redux/reducer/QuanlySinhvienReducer";
 class FormComponent extends Component {
-  state = {
-    id: "",
-    name: "",
-    sdt: "",
-    email: "",
-  };
   handleChangeInput = (e) => {
     let tagInput = e.target;
 
     let { name, value } = tagInput;
     //console.log(name, value);
-    this.setState(
-      {
-        [name]: value,
-      },
-      () => {
-        console.log(this.state);
-      }
-    );
+    this.props.updateSinhVienValues({
+      ...this.props.sinhVienValues,
+      [name]: value,
+    });
   };
   submitForm = (e) => {
     e.preventDefault();
-    this.props.addSv(this.state);
-    //console.log("abc");
+    const { id, name, sdt, email } = this.props.sinhVienValues.values;
+    //console.log(id, name, sdt, email);
+    if (id && name && sdt && email) {
+      this.props.pushNewSV({
+        id,
+        name,
+        sdt,
+        email,
+      });
+
+      this.props.updateSinhVienValues({
+        values: {
+          id: "",
+          name: "",
+          sdt: "",
+          email: "",
+        },
+      });
+    }
   };
   render() {
+    const { sinhVienValues } = this.props;
+    //console.log(sinhVienValues);
     return (
       <div className="my-2">
         <form className="card" onSubmit={this.submitForm}>
@@ -42,7 +55,7 @@ class FormComponent extends Component {
                     type="text"
                     className="form-control"
                     name="id"
-                    value={this.state.id}
+                    value={sinhVienValues.id}
                     onChange={this.handleChangeInput}
                   />
                 </div>
@@ -52,7 +65,7 @@ class FormComponent extends Component {
                     type="number"
                     className="form-control"
                     name="sdt"
-                    value={this.state.sdt}
+                    value={sinhVienValues.sdt}
                     onChange={this.handleChangeInput}
                   />
                 </div>
@@ -64,7 +77,7 @@ class FormComponent extends Component {
                     type="text"
                     className="form-control"
                     name="name"
-                    value={this.state.name}
+                    value={sinhVienValues.name}
                     onChange={this.handleChangeInput}
                   />
                 </div>
@@ -74,7 +87,7 @@ class FormComponent extends Component {
                     type="text"
                     className="form-control"
                     name="email"
-                    value={this.state.email}
+                    value={sinhVienValues.email}
                     onChange={this.handleChangeInput}
                   />
                 </div>
@@ -93,19 +106,15 @@ class FormComponent extends Component {
 }
 
 //
+const mapStateToProps = (state) => ({
+  sinhVienValues: state.QuanlySinhvienReducer.sinhVien,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addSv: (sinhVien) => {
-      const action = {
-        type: "ADD-SINH-VIEN",
-        sinhVien,
-      };
-      dispatch(action);
-    },
-  };
-};
+const mapDispatchToProps = (dispatch) => ({
+  pushNewSV: (sinhVien) => dispatch(pushNewSV(sinhVien)),
+  updateSinhVienValues: (values) => dispatch(updateSinhVienValues(values)),
+});
 
-export default connect(null, mapDispatchToProps)(FormComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(FormComponent);
 
 //

@@ -1,15 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  updateSinhVienValues,
-  pushNewSV,
-} from "../redux/reducer/QuanlySinhvienReducer";
+import { updateSinhVienValues } from "../redux/reducer/QuanlySinhvienReducer";
 class FormComponent extends Component {
   handleChangeInput = (e) => {
-    let tagInput = e.target;
+    let { name, value } = e.target;
 
-    let { name, value } = tagInput;
-    //console.log(name, value);
     this.props.updateSinhVienValues({
       ...this.props.sinhVienValues,
       [name]: value,
@@ -17,29 +12,12 @@ class FormComponent extends Component {
   };
   submitForm = (e) => {
     e.preventDefault();
-    const { id, name, sdt, email } = this.props.sinhVienValues.values;
-    //console.log(id, name, sdt, email);
-    if (id && name && sdt && email) {
-      this.props.pushNewSV({
-        id,
-        name,
-        sdt,
-        email,
-      });
-
-      this.props.updateSinhVienValues({
-        values: {
-          id: "",
-          name: "",
-          sdt: "",
-          email: "",
-        },
-      });
-    }
+    this.props.pushNewSV(this.props.newArrSV);
   };
   render() {
+    console.log(this.props);
     const { sinhVienValues } = this.props;
-    //console.log(sinhVienValues);
+    console.log(sinhVienValues);
     return (
       <div className="my-2">
         <form className="card" onSubmit={this.submitForm}>
@@ -107,14 +85,22 @@ class FormComponent extends Component {
 
 //
 const mapStateToProps = (state) => ({
-  sinhVienValues: state.QuanlySinhvienReducer.sinhVien,
+  sinhVienValues: state.QuanlySinhvienReducer.sinhVien.values,
+  newArrSV: state.QuanlySinhvienReducer.arrSV,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  pushNewSV: (sinhVien) => dispatch(pushNewSV(sinhVien)),
-  updateSinhVienValues: (values) => dispatch(updateSinhVienValues(values)),
-});
-
+const mapDispatchToProps = (dispatch) => {
+  return {
+    pushNewSV: (sinhvien) => {
+      const action = {
+        type: "ADD-SINH-VIEN",
+        payload: sinhvien,
+      };
+      dispatch(action);
+    },
+    updateSinhVienValues: (values) => dispatch(updateSinhVienValues(values)),
+  };
+};
 export default connect(mapStateToProps, mapDispatchToProps)(FormComponent);
 
 //

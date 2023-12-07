@@ -50,6 +50,11 @@ class ListSV extends Component {
       </div>
     );
   }
+  componentDidUpdate(prevProps) {
+    if (prevProps.arrSV !== this.props.arrSV) {
+      console.log("arrSV has been updated:", this.props.arrSV);
+    }
+  }
 }
 
 const mapStateToProps = (state) => ({

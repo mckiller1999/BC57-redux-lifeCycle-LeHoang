@@ -31,18 +31,9 @@ const QuanlySinhvienReducer = createSlice({
   initialState,
   reducers: {
     pushNewSV: (state, action) => {
-      //console.log(action.type);
-      switch (action.type) {
-        case "ADD-SINH-VIEN": {
-          console.log(action);
-          const arrSvUpdate = [...state.arrSV, action.sinhvien];
-          state.arrSV = arrSvUpdate;
-          return { ...state };
-        }
-        default: {
-          return { ...state };
-        }
-      }
+      const arrUpdate = [...state.arrSV, action.sinhvien];
+      state.arrSV = arrUpdate;
+      return { ...state };
     },
     updateSinhVienValues: (state, action) => {
       state.sinhVien.values = action.payload;
@@ -50,9 +41,12 @@ const QuanlySinhvienReducer = createSlice({
   },
 });
 
-export const { pushNewSV, updateSinhVienValues } =
-  QuanlySinhvienReducer.actions;
+export const { updateSinhVienValues } = QuanlySinhvienReducer.actions;
 
-console.log(QuanlySinhvienReducer.actions);
+export const pushNewSV = (sinhVien) => ({
+  type: "ADD-SINH-VIEN",
+  payload: sinhVien,
+});
+//console.log(QuanlySinhvienReducer.actions);
 
 export default QuanlySinhvienReducer.reducer;

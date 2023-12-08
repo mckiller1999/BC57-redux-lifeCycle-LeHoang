@@ -4,8 +4,8 @@ import {
   deleteSV,
   disBtn,
   updateSinhVienValues,
-  updateAddButtonState,
   searchSV,
+  toggleEditMode,
 } from "../redux/reducer/QuanlySinhvienReducer";
 
 class ListSV extends Component {
@@ -16,7 +16,8 @@ class ListSV extends Component {
   handleEdit = (value) => {
     this.props.dispatch(updateSinhVienValues(value));
     this.props.dispatch(disBtn(false));
-    this.props.dispatch(updateAddButtonState(true));
+    this.props.dispatch(toggleEditMode(true));
+    console.log(this.props.sinhVien.isInEditMode);
   };
 
   handleSearch = (e) => {
@@ -96,6 +97,7 @@ const mapStateToProps = (state) => ({
   arrSV: state.QuanlySinhvienReducer.arrSV,
   searchResults: state.QuanlySinhvienReducer.searchResults,
   valid: state.QuanlySinhvienReducer.sinhVien.valid,
+  sinhVien: state.QuanlySinhvienReducer.sinhVien,
 });
 
 export default connect(mapStateToProps)(ListSV);

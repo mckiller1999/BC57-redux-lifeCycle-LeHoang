@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import {
   disBtn,
   pushNewSV,
+  toggleEditMode,
   updateError,
   updateNewSV,
   updateSinhVienValues,
@@ -30,12 +31,7 @@ class FormComponent extends Component {
   };
 
   render() {
-    const {
-      sinhVienValues,
-      errorValue,
-      addButtonDisabled,
-      updateButtonDisabled,
-    } = this.props;
+    const { sinhVienValues, errorValue, addButtonDisabled } = this.props;
 
     return (
       <div className="my-2">
@@ -108,26 +104,12 @@ class FormComponent extends Component {
               type="button"
               onClick={() => {
                 this.props.updateNewSV(this.props.sinhVienValues);
+                this.props.toggleEditMode(false);
               }}
-              disabled={updateButtonDisabled}
+              disabled={!this.props.sinhVien.isInEditMode}
             >
               Cập nhật sinh viên
             </button>
-
-            {/* <button className="btn btn-success" type="submit"
-            
-            >
-              Thêm Sinh Viên
-            </button> */}
-            {/* <button
-              className="btn btn-primary mx-5"
-              type="submit"
-              onClick={() => {
-                this.props.updateNewSV(sinhVienValues);
-              }}
-            >
-              Cập nhật sinh viên
-            </button> */}
           </div>
         </form>
       </div>
@@ -141,8 +123,7 @@ const mapStateToProps = (state) => ({
   errorValue: state.QuanlySinhvienReducer.sinhVien.errors,
   valid: state.QuanlySinhvienReducer.sinhVien.valid,
   addButtonDisabled: state.QuanlySinhvienReducer.sinhVien.addButtonDisabled,
-  updateButtonVisible:
-    state.QuanlySinhvienReducer.sinhVien.updateButtonDisabled,
+  sinhVien: state.QuanlySinhvienReducer.sinhVien,
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -151,11 +132,13 @@ const mapDispatchToProps = (dispatch) => {
       const action = pushNewSV(sinhvien);
       dispatch(action);
     },
+
     updateSinhVienValues: (values) => dispatch(updateSinhVienValues(values)),
     updateNewSV: (value) => dispatch(updateNewSV(value)),
     updateError: (value) => dispatch(updateError(value)),
     validationSV: (value) => dispatch(validationSV(value)),
     disBtn: (valid) => dispatch(disBtn(valid)),
+    toggleEditMode: (isInEditMode) => dispatch(toggleEditMode(isInEditMode)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(FormComponent);

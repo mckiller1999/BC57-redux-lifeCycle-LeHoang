@@ -18,6 +18,7 @@ const initialState = {
       email: "",
     },
     valid: false,
+    isInEditMode: false,
   },
 };
 
@@ -33,17 +34,21 @@ const QuanlySinhvienReducer = createSlice({
       //console.log(action);
       state.arrSV.push(action.payload);
       state.sinhVien.values = {
-        id: " ",
-        name: " ",
-        sdt: " ",
-        email: " ",
+        id: "",
+        name: "",
+        sdt: "",
+        email: "",
       };
+      state.sinhVien.valid = false;
     },
     updateSinhVienValues: (state, action) => {
       state.sinhVien.values = action.payload;
     },
     deleteSV: (state, action) => {
       state.arrSV = state.arrSV.filter((sV) => sV.id !== action.payload);
+      state.searchResults = state.searchResults.filter(
+        (sV) => sV.id !== action.payload
+      );
     },
     updateNewSV: (state, action) => {
       const updatedArrSV = state.arrSV.map((sv) => {
@@ -134,9 +139,6 @@ const QuanlySinhvienReducer = createSlice({
     updateAddButtonState: (state, action) => {
       state.sinhVien.addButtonDisabled = action.payload;
     },
-    updateUpdateButtonState: (state, action) => {
-      state.sinhVien.updateButtonDisabled = action.payload;
-    },
     searchSV: (state, action) => {
       const searchTerm = action.payload.toLowerCase();
       const searchResults = state.arrSV.filter(
@@ -145,6 +147,11 @@ const QuanlySinhvienReducer = createSlice({
           sinhVien.name.toLowerCase().includes(searchTerm)
       );
       state.searchResults = searchResults;
+    },
+
+    //
+    toggleEditMode: (state, action) => {
+      state.sinhVien.isInEditMode = action.payload;
     },
   },
 });
@@ -158,8 +165,8 @@ export const {
   validationSV,
   disBtn,
   updateAddButtonState,
-  updateUpdateButtonState,
   searchSV,
+  toggleEditMode,
 } = QuanlySinhvienReducer.actions;
 
 export default QuanlySinhvienReducer.reducer;

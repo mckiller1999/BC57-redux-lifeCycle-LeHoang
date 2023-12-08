@@ -1,9 +1,21 @@
+//cập nhật thêm sau
+//chuyển các function về redux hết mức có thể
+
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { updateSinhVienValues } from "../redux/reducer/QuanlySinhvienReducer";
+import {
+  disBtn,
+  pushNewSV,
+  updateError,
+  updateNewSV,
+  updateSinhVienValues,
+  validationSV,
+} from "../redux/reducer/QuanlySinhvienReducer";
 class FormComponent extends Component {
   handleChangeInput = (e) => {
     let { name, value } = e.target;
+
+    this.props.validationSV({ name, value });
 
     this.props.updateSinhVienValues({
       ...this.props.sinhVienValues,
@@ -12,12 +24,19 @@ class FormComponent extends Component {
   };
   submitForm = (e) => {
     e.preventDefault();
-    this.props.pushNewSV(this.props.newArrSV);
+
+    this.props.pushNewSV(this.props.sinhVienValues);
+    return;
   };
+
   render() {
-    console.log(this.props);
-    const { sinhVienValues } = this.props;
-    console.log(sinhVienValues);
+    const {
+      sinhVienValues,
+      errorValue,
+      addButtonDisabled,
+      updateButtonDisabled,
+    } = this.props;
+
     return (
       <div className="my-2">
         <form className="card" onSubmit={this.submitForm}>
@@ -36,6 +55,7 @@ class FormComponent extends Component {
                     value={sinhVienValues.id}
                     onChange={this.handleChangeInput}
                   />
+                  <p className="text-danger">{errorValue.id}</p>
                 </div>
                 <div className="mb-2">
                   <label>Số Điện Thoại:</label>
@@ -46,6 +66,7 @@ class FormComponent extends Component {
                     value={sinhVienValues.sdt}
                     onChange={this.handleChangeInput}
                   />
+                  <p className="text-danger">{errorValue.sdt}</p>
                 </div>
               </div>
               <div className="col-6">
@@ -58,24 +79,55 @@ class FormComponent extends Component {
                     value={sinhVienValues.name}
                     onChange={this.handleChangeInput}
                   />
+                  <p className="text-danger">{errorValue.name}</p>
                 </div>
                 <div className="mb-2">
                   <label>Email:</label>
                   <input
-                    type="text"
+                    type="email"
                     className="form-control"
                     name="email"
                     value={sinhVienValues.email}
                     onChange={this.handleChangeInput}
                   />
+                  <p className="text-danger">{errorValue.email}</p>
                 </div>
               </div>
             </div>
           </div>
           <div className="card-footer">
-            <button className="btn btn-success" type="submit">
+            <button
+              className="btn btn-success"
+              type="submit"
+              disabled={!this.props.valid || addButtonDisabled}
+            >
               Thêm Sinh Viên
             </button>
+            <button
+              className="btn btn-primary mx-5"
+              type="button"
+              onClick={() => {
+                this.props.updateNewSV(this.props.sinhVienValues);
+              }}
+              disabled={updateButtonDisabled}
+            >
+              Cập nhật sinh viên
+            </button>
+
+            {/* <button className="btn btn-success" type="submit"
+            
+            >
+              Thêm Sinh Viên
+            </button> */}
+            {/* <button
+              className="btn btn-primary mx-5"
+              type="submit"
+              onClick={() => {
+                this.props.updateNewSV(sinhVienValues);
+              }}
+            >
+              Cập nhật sinh viên
+            </button> */}
           </div>
         </form>
       </div>
@@ -86,21 +138,24 @@ class FormComponent extends Component {
 //
 const mapStateToProps = (state) => ({
   sinhVienValues: state.QuanlySinhvienReducer.sinhVien.values,
-  newArrSV: state.QuanlySinhvienReducer.arrSV,
+  errorValue: state.QuanlySinhvienReducer.sinhVien.errors,
+  valid: state.QuanlySinhvienReducer.sinhVien.valid,
+  addButtonDisabled: state.QuanlySinhvienReducer.sinhVien.addButtonDisabled,
+  updateButtonVisible:
+    state.QuanlySinhvienReducer.sinhVien.updateButtonDisabled,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
     pushNewSV: (sinhvien) => {
-      const action = {
-        type: "ADD-SINH-VIEN",
-        payload: sinhvien,
-      };
+      const action = pushNewSV(sinhvien);
       dispatch(action);
     },
     updateSinhVienValues: (values) => dispatch(updateSinhVienValues(values)),
+    updateNewSV: (value) => dispatch(updateNewSV(value)),
+    updateError: (value) => dispatch(updateError(value)),
+    validationSV: (value) => dispatch(validationSV(value)),
+    disBtn: (valid) => dispatch(disBtn(valid)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(FormComponent);
-
-//

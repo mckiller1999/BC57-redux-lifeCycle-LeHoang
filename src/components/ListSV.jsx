@@ -1,7 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import {
+  deleteSV,
+  disBtn,
+  updateSinhVienValues,
+  updateAddButtonState,
+} from "../redux/reducer/QuanlySinhvienReducer";
 
 class ListSV extends Component {
+  handleDelete = (id) => {
+    this.props.dispatch(deleteSV(id));
+  };
+  handleEdit = (value) => {
+    this.props.dispatch(updateSinhVienValues(value));
+    this.props.dispatch(disBtn(false));
+    this.props.dispatch(updateAddButtonState(true));
+  };
   renderList = () => {
     const { arrSV } = this.props;
     //console.log(arrSV);
@@ -14,7 +28,15 @@ class ListSV extends Component {
           <td>{sinhVien.sdt}</td>
           <td>{sinhVien.email}</td>
           <td>
-            <button type="button" name="" id="" className="btn btn-danger mx-2">
+            <button
+              type="button"
+              name=""
+              id=""
+              className="btn btn-danger mx-2"
+              onClick={() => {
+                this.handleDelete(sinhVien.id);
+              }}
+            >
               Xóa
             </button>
             <button
@@ -22,6 +44,9 @@ class ListSV extends Component {
               name=""
               id=""
               className="btn btn-primary mx-2"
+              onClick={() => {
+                this.handleEdit(sinhVien);
+              }}
             >
               Sửa
             </button>
@@ -30,6 +55,7 @@ class ListSV extends Component {
       );
     });
   };
+
   render() {
     return (
       <div className="card">
@@ -50,15 +76,11 @@ class ListSV extends Component {
       </div>
     );
   }
-  componentDidUpdate(prevProps) {
-    if (prevProps.arrSV !== this.props.arrSV) {
-      console.log("arrSV has been updated:", this.props.arrSV);
-    }
-  }
 }
 
 const mapStateToProps = (state) => ({
   arrSV: state.QuanlySinhvienReducer.arrSV,
+  valid: state.QuanlySinhvienReducer.sinhVien.valid,
 });
 
 export default connect(mapStateToProps)(ListSV);

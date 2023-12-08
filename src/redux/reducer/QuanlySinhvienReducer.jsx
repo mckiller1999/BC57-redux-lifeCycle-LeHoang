@@ -1,13 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  arrSV: [
-    { id: 1, name: "abc", sdt: "0000000001", email: "abc@gmail1.com" },
-    { id: 2, name: "abc1", sdt: "0000000002", email: "abc@gmail2.com" },
-    { id: 3, name: "abc2", sdt: "0000000003", email: "abc@gmail3.com" },
-    { id: 4, name: "abc3", sdt: "0000000004", email: "abc@gmail4.com" },
-    { id: 5, name: "abc4", sdt: "0000000005", email: "abc@gmail5.com" },
-  ],
+  arrSV: [],
+  searchResults: [],
   sinhVien: {
     values: {
       id: "",
@@ -55,6 +50,16 @@ const QuanlySinhvienReducer = createSlice({
         return sv.id === action.payload.id ? action.payload : sv;
       });
       state.arrSV = updatedArrSV;
+      const updatedSearchResults = state.searchResults.map((sv) => {
+        return sv.id === action.payload.id ? action.payload : sv;
+      });
+      state.searchResults = updatedSearchResults;
+      state.sinhVien.values = {
+        id: " ",
+        name: " ",
+        sdt: " ",
+        email: " ",
+      };
     },
     validationSV: (state, action) => {
       let errMess = "";
@@ -132,6 +137,15 @@ const QuanlySinhvienReducer = createSlice({
     updateUpdateButtonState: (state, action) => {
       state.sinhVien.updateButtonDisabled = action.payload;
     },
+    searchSV: (state, action) => {
+      const searchTerm = action.payload.toLowerCase();
+      const searchResults = state.arrSV.filter(
+        (sinhVien) =>
+          sinhVien.id.toLowerCase().includes(searchTerm) ||
+          sinhVien.name.toLowerCase().includes(searchTerm)
+      );
+      state.searchResults = searchResults;
+    },
   },
 });
 
@@ -145,6 +159,7 @@ export const {
   disBtn,
   updateAddButtonState,
   updateUpdateButtonState,
+  searchSV,
 } = QuanlySinhvienReducer.actions;
 
 export default QuanlySinhvienReducer.reducer;

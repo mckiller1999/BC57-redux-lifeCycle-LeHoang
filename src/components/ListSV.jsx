@@ -67,14 +67,18 @@ class ListSV extends Component {
     return (
       <div className="card">
         <div className="my-2">
-          <input
-            className="form-control"
-            type="text"
-            placeholder="Nhập mã sinh viên"
-            onChange={this.handleSearch}
-          />
+          <div className="container">
+            <h3>Tìm Kiếm Sinh Viên</h3>
+            <input
+              className="form-control"
+              type="text"
+              placeholder="Nhập mã sinh viên"
+              onChange={this.handleSearch}
+            />
+          </div>
         </div>
         <div className="table-responsive">
+          <h3 className="text-center">Danh sách sinh viên</h3>
           <table className="table">
             <thead className="table table-dark">
               <tr>

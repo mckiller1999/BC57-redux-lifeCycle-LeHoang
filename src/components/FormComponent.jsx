@@ -35,6 +35,7 @@ class FormComponent extends Component {
 
     return (
       <div className="my-2">
+        <h3>Bảng nhập thông tin sinh viên</h3>
         <form className="card" onSubmit={this.submitForm}>
           <div className="card-header bg-dark text-white">
             Thông tin sinh viên
@@ -45,6 +46,7 @@ class FormComponent extends Component {
                 <div className="mb-2">
                   <label>Mã SV:</label>
                   <input
+                    disabled={this.props.isInEditMode}
                     type="text"
                     className="form-control"
                     name="id"
@@ -124,6 +126,7 @@ const mapStateToProps = (state) => ({
   valid: state.QuanlySinhvienReducer.sinhVien.valid,
   addButtonDisabled: state.QuanlySinhvienReducer.sinhVien.addButtonDisabled,
   sinhVien: state.QuanlySinhvienReducer.sinhVien,
+  isInEditMode: state.QuanlySinhvienReducer.sinhVien.isInEditMode,
 });
 
 const mapDispatchToProps = (dispatch) => {
